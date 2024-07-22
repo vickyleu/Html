@@ -1,13 +1,16 @@
 package com.zzhoujay.htmldemo;
 
+import static com.zzhoujay.html.Html.FROM_HTML_MODE_COMPACT;
+
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.zzhoujay.html.Html;
 
@@ -128,12 +131,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Spanned spanned = Html.fromHtml(color_test);
+//        Spanned spanned = Html.fromHtml(color_test);
+        Spanned spanned = Html.fromHtml("""
+                <p style="background-color:rgba(255,0,0,1);">你们好</p>\
+                <p style="background-color:rgba(255,0,0,1);">我们好\n\n我们</p>\n
+                """);
 
         SpannableString hello = new SpannableString("hello");
         hello.setSpan(new ForegroundColorSpan(Color.BLUE), 0, hello.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         hello.setSpan(new BackgroundColorSpan(Color.GRAY), 0, hello.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
+        ((TextView) findViewById(R.id.text)).setBackgroundColor(Color.BLUE);
         ((TextView) findViewById(R.id.text)).setText(spanned);
 
 

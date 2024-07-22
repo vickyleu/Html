@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.fonts.Font;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.Spannable;
@@ -23,6 +24,7 @@ import android.text.style.SuperscriptSpan;
 import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 
 import com.zzhoujay.html.style.ZBulletSpan;
 import com.zzhoujay.html.style.ZCodeBlockSpan;
@@ -166,25 +168,39 @@ class HtmlToSpannedConverter implements ContentHandler {
     private static void appendNewlines(Editable text, int minNewline) {
         final int len = text.length();
 
+
         if (len == 0) {
             return;
         }
-
         int existingNewlines = 0;
-        for (int i = len - 1; i >= 0 && text.charAt(i) == '\n'; i--) {
+        for (int i = len - 1;i >= 0 && text.charAt(i) == '\n';i--) {
             existingNewlines++;
         }
-
+        Log.wtf("appendNewlines","="+Log.getStackTraceString(new RuntimeException(""+text)));
         for (int j = existingNewlines; j < minNewline; j++) {
             text.append("\n");
         }
     }
 
+    private static int getSpanLineForString(Editable text){
+        int lines=0;
+        for (int i =0;i<text.length(); i++) {
+            if(text.charAt(i)=='\n'){
+                lines++;
+            }
+            Log.wtf("getSpanLineForString","=="+text.charAt(i)+"==");
+        }
+        return lines;
+    }
+
     private static void startBlockElement(Editable text, Attributes attributes, int margin) {
         final int len = text.length();
-        if (margin > 0) {
-            appendNewlines(text, margin);
-            start(text, new Newline(margin));
+        int lines = getSpanLineForString(text)+1;
+        int line = Math.min(lines, margin);
+        Log.wtf("startBlockElement","text:"+text+"= lines"+lines);
+        if (line > 0) {
+            appendNewlines(text, line);
+            start(text, new Newline(line-1));
         }
 
         String style = attributes.getValue("", "style");
@@ -213,13 +229,33 @@ class HtmlToSpannedConverter implements ContentHandler {
         }
     }
 
+    private static String getCharsString(Editable text) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            switch (c) {
+                case '\n':
+                    sb.append("\\n");
+                    break;
+                case '\t':
+                    sb.append("\\t");
+                    break;
+                // 如果有其他需要处理的转义字符，可以在这里添加
+                default:
+                    sb.append(c);
+                    break;
+            }
+        }
+        return sb.toString();
+    }
     private static void endBlockElement(Editable text) {
         Newline n = getLast(text, Newline.class);
         if (n != null) {
+//            int lines = getSpanLineForString(text);
+//            int line = Math.max(lines, n.mNumNewlines);
             appendNewlines(text, n.mNumNewlines);
             text.removeSpan(n);
         }
-
         Indent indent = getLast(text, Indent.class);
         if (indent != null) {
             setSpanFromMark(text, indent, new ZIndentSpan(indent.mIndentSize));
@@ -420,6 +456,7 @@ class HtmlToSpannedConverter implements ContentHandler {
     }
 
     private void handleStartTag(String tag, Attributes attributes) {
+        Log.wtf("handleStartTag","tag::"+tag);
         //noinspection StatementWithEmptyBody
         if (tag.equalsIgnoreCase("br")) {
             // We don't need to handle this. TagSoup will ensure that there's a </br> for each <br>
@@ -493,6 +530,7 @@ class HtmlToSpannedConverter implements ContentHandler {
     }
 
     private void handleEndTag(String tag) {
+        Log.wtf("handleEndTag","tag::"+tag);
         if (tag.equalsIgnoreCase("br")) {
             handleBr(mSpannableStringBuilder);
         } else if (tag.equalsIgnoreCase("p")) {
