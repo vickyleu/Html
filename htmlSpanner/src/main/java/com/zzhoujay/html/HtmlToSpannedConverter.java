@@ -176,7 +176,7 @@ class HtmlToSpannedConverter implements ContentHandler {
         for (int i = len - 1;i >= 0 && text.charAt(i) == '\n';i--) {
             existingNewlines++;
         }
-        Log.wtf("appendNewlines","="+Log.getStackTraceString(new RuntimeException(""+text)));
+        Log.wtf("appendNewlines","="+ getCharsString(text)+"==");
         for (int j = existingNewlines; j < minNewline; j++) {
             text.append("\n");
         }
@@ -188,19 +188,17 @@ class HtmlToSpannedConverter implements ContentHandler {
             if(text.charAt(i)=='\n'){
                 lines++;
             }
-            Log.wtf("getSpanLineForString","=="+text.charAt(i)+"==");
         }
         return lines;
     }
 
     private static void startBlockElement(Editable text, Attributes attributes, int margin) {
         final int len = text.length();
-        int lines = getSpanLineForString(text)+1;
-        int line = Math.min(lines, margin);
-        Log.wtf("startBlockElement","text:"+text+"= lines"+lines);
-        if (line > 0) {
-            appendNewlines(text, line);
-            start(text, new Newline(line-1));
+        if (margin > 0) {
+            appendNewlines(text, margin);
+//            int leave = margin-1;
+//            if(leave<0) leave=0;
+            start(text, new Newline(0));
         }
 
         String style = attributes.getValue("", "style");
@@ -251,8 +249,6 @@ class HtmlToSpannedConverter implements ContentHandler {
     private static void endBlockElement(Editable text) {
         Newline n = getLast(text, Newline.class);
         if (n != null) {
-//            int lines = getSpanLineForString(text);
-//            int line = Math.max(lines, n.mNumNewlines);
             appendNewlines(text, n.mNumNewlines);
             text.removeSpan(n);
         }
@@ -456,13 +452,17 @@ class HtmlToSpannedConverter implements ContentHandler {
     }
 
     private void handleStartTag(String tag, Attributes attributes) {
-        Log.wtf("handleStartTag","tag::"+tag);
         //noinspection StatementWithEmptyBody
         if (tag.equalsIgnoreCase("br")) {
             // We don't need to handle this. TagSoup will ensure that there's a </br> for each <br>
             // so we can safely emit the linebreaks when we handle the close tag.
         } else if (tag.equalsIgnoreCase("p")) {
-            startBlockElement(mSpannableStringBuilder, attributes, getMarginParagraph());
+//            String s =  getCharsString(mSpannableStringBuilder).replace("\\n", "");
+//            Log.wtf("getCharsString","s="+s+"=");
+//            int lines =s.isEmpty()? 0 : getSpanLineForString(mSpannableStringBuilder)+1;
+//            int line = Math.min(lines, getMarginParagraph());
+//            Log.wtf("startBlockElement","text:"+getCharsString(mSpannableStringBuilder)+"= lines="+lines);
+            startBlockElement(mSpannableStringBuilder, attributes, 1);//getMarginParagraph()
             startCssStyle(mSpannableStringBuilder, attributes);
         } else if (tag.equalsIgnoreCase("ul")) {
             startBlockElement(mSpannableStringBuilder, attributes, getMarginList());
@@ -530,7 +530,6 @@ class HtmlToSpannedConverter implements ContentHandler {
     }
 
     private void handleEndTag(String tag) {
-        Log.wtf("handleEndTag","tag::"+tag);
         if (tag.equalsIgnoreCase("br")) {
             handleBr(mSpannableStringBuilder);
         } else if (tag.equalsIgnoreCase("p")) {

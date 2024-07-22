@@ -132,10 +132,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        Spanned spanned = Html.fromHtml(color_test);
-        Spanned spanned = Html.fromHtml("""
-                <p style="background-color:rgba(255,0,0,1);">你们好</p>\
-                <p style="background-color:rgba(255,0,0,1);">我们好\n\n我们</p>\n
-                """);
+        Spanned spanned = Html.fromHtml("<html><body><p style=\"background-color:rgba(255,0,0,1);\">你们好</p><p style=\"background-color:rgba(255,0,0,1);\">123312n</><p style=\"background-color:rgba(255,0,0,1);\">5678</></body></>");
 
         SpannableString hello = new SpannableString("hello");
         hello.setSpan(new ForegroundColorSpan(Color.BLUE), 0, hello.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
