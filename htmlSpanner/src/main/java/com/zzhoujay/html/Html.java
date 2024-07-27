@@ -6,6 +6,8 @@ import android.text.Spanned;
 import org.ccil.cowan.tagsoup.HTMLSchema;
 import org.ccil.cowan.tagsoup.Parser;
 
+import java.util.List;
+
 /**
  * Created by zz on 2018/1/20 0020.
  * Html parser based on native Html parser.
@@ -49,13 +51,13 @@ public class Html {
      */
     public static final int FROM_HTML_OPTION_USE_CSS_COLORS = 0x00000100;
     /**
-     * Flags for {@link #fromHtml(String, int, android.text.Html.ImageGetter, android.text.Html.TagHandler)}: Separate block-level
+     * Flags for {@link #fromHtml(String, int, android.text.Html.ImageGetter, android.text.Html.TagHandler,List)}: Separate block-level
      * elements with blank lines (two newline characters) in between. This is the legacy behavior
      * prior to N.
      */
     public static final int FROM_HTML_MODE_LEGACY = 0x00000000;
     /**
-     * Flags for {@link #fromHtml(String, int, android.text.Html.ImageGetter, android.text.Html.TagHandler)}: Separate block-level
+     * Flags for {@link #fromHtml(String, int, android.text.Html.ImageGetter, android.text.Html.TagHandler,List)}: Separate block-level
      * elements with line breaks (single newline character) in between. This inverts the
      * {@link Spanned} to HTML string conversion done with the option
      */
@@ -78,7 +80,7 @@ public class Html {
      */
     @Deprecated
     public static Spanned fromHtml(String source) {
-        return fromHtml(source, FROM_HTML_MODE_LEGACY, null, null);
+        return fromHtml(source, FROM_HTML_MODE_LEGACY, null, null,null);
     }
 
     /**
@@ -89,18 +91,18 @@ public class Html {
      * <p>This uses TagSoup to handle real HTML, including all of the brokenness found in the wild.
      */
     public static Spanned fromHtml(String source, int flags) {
-        return fromHtml(source, flags, null, null);
+        return fromHtml(source, flags, null, null,null);
     }
 
     /**
      * Returns displayable styled text from the provided HTML string with the legacy flags
      * {@link #FROM_HTML_MODE_LEGACY}.
      *
-     * @deprecated use {@link #fromHtml(String, int, android.text.Html.ImageGetter, android.text.Html.TagHandler)} instead.
+     * @deprecated use {@link #fromHtml(String, int, android.text.Html.ImageGetter, android.text.Html.TagHandler,List)} instead.
      */
     @Deprecated
-    public static Spanned fromHtml(String source, android.text.Html.ImageGetter imageGetter, android.text.Html.TagHandler tagHandler) {
-        return fromHtml(source, FROM_HTML_MODE_LEGACY, imageGetter, tagHandler);
+    public static Spanned fromHtml(String source, android.text.Html.ImageGetter imageGetter, android.text.Html.TagHandler tagHandler, List< CustomTagHandler> customTagHandlers) {
+        return fromHtml(source, FROM_HTML_MODE_LEGACY, imageGetter, tagHandler,customTagHandlers);
     }
 
     /**
@@ -112,7 +114,7 @@ public class Html {
      * <p>This uses TagSoup to handle real HTML, including all of the brokenness found in the wild.
      */
     public static Spanned fromHtml(String source, int flags, android.text.Html.ImageGetter imageGetter,
-                                   android.text.Html.TagHandler tagHandler) {
+                                   android.text.Html.TagHandler tagHandler, List<CustomTagHandler> customTagHandlers) {
         Parser parser = new Parser();
         try {
             parser.setProperty(Parser.schemaProperty, HtmlParser.schema);
@@ -125,7 +127,7 @@ public class Html {
         }
 
         HtmlToSpannedConverter converter =
-                new HtmlToSpannedConverter(source, imageGetter, tagHandler, parser, flags);
+                new HtmlToSpannedConverter(source, imageGetter, tagHandler, parser, flags,customTagHandlers);
         return converter.convert();
     }
 

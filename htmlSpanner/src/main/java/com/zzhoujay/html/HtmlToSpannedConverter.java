@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.fonts.Font;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.Spannable;
@@ -43,6 +42,7 @@ import org.xml.sax.XMLReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -88,6 +88,7 @@ class HtmlToSpannedConverter implements ContentHandler {
     private String mSource;
     private XMLReader mReader;
     private SpannableStringBuilder mSpannableStringBuilder;
+    private List<CustomTagHandler> customTagHandlers;
     private android.text.Html.ImageGetter mImageGetter;
     private android.text.Html.TagHandler mTagHandler;
     private int mFlags;
@@ -95,13 +96,14 @@ class HtmlToSpannedConverter implements ContentHandler {
     private boolean mPreStart;
 
     HtmlToSpannedConverter(String source, android.text.Html.ImageGetter imageGetter,
-                           android.text.Html.TagHandler tagHandler, Parser parser, int flags) {
+                           android.text.Html.TagHandler tagHandler, Parser parser, int flags, List<CustomTagHandler> customTagHandlers) {
         mSource = source;
         mSpannableStringBuilder = new SpannableStringBuilder();
         mImageGetter = imageGetter;
         mTagHandler = tagHandler;
         mReader = parser;
         mFlags = flags;
+        this.customTagHandlers = customTagHandlers;
     }
 
     private static Pattern getArgbColorPattern() {
@@ -167,8 +169,6 @@ class HtmlToSpannedConverter implements ContentHandler {
 
     private static void appendNewlines(Editable text, int minNewline) {
         final int len = text.length();
-
-
         if (len == 0) {
             return;
         }
@@ -176,7 +176,6 @@ class HtmlToSpannedConverter implements ContentHandler {
         for (int i = len - 1;i >= 0 && text.charAt(i) == '\n';i--) {
             existingNewlines++;
         }
-        Log.wtf("appendNewlines","="+ getCharsString(text)+"==");
         for (int j = existingNewlines; j < minNewline; j++) {
             text.append("\n");
         }
@@ -452,6 +451,12 @@ class HtmlToSpannedConverter implements ContentHandler {
     }
 
     private void handleStartTag(String tag, Attributes attributes) {
+        Log.wtf("handleStartTag","customTagHandlers="+customTagHandlers.size());
+        for (CustomTagHandler handler:customTagHandlers) {
+            if (handler.handleTag(tag,attributes,mSpannableStringBuilder)) {
+                return;
+            }
+        }
         //noinspection StatementWithEmptyBody
         if (tag.equalsIgnoreCase("br")) {
             // We don't need to handle this. TagSoup will ensure that there's a </br> for each <br>
@@ -530,6 +535,11 @@ class HtmlToSpannedConverter implements ContentHandler {
     }
 
     private void handleEndTag(String tag) {
+        for (CustomTagHandler handler:customTagHandlers) {
+            if (handler.handleTag(tag,null,mSpannableStringBuilder)) {
+                return;
+            }
+        }
         if (tag.equalsIgnoreCase("br")) {
             handleBr(mSpannableStringBuilder);
         } else if (tag.equalsIgnoreCase("p")) {

@@ -21,6 +21,7 @@ plugins{
 }
 
 allprojects {
+    return@allprojects
     val properties = Properties().apply {
         runCatching { rootProject.file("local.properties") }
             .getOrNull()

@@ -1,5 +1,6 @@
 plugins{
     alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
 android{
@@ -7,6 +8,13 @@ android{
     namespace = "com.zzhoujay.html"
     defaultConfig{
         minSdk = libs.versions.android.minSdk.get().toInt()
+    }
+    sourceSets{
+        getByName("main"){
+            java{
+                srcDirs("src/main/java","src/main/kotlin")
+            }
+        }
     }
     lint{
         abortOnError = false
