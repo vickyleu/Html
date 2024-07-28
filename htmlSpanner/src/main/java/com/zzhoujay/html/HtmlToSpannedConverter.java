@@ -453,7 +453,6 @@ import java.util.regex.Pattern;
     private void handleStartTag(String tag, Attributes attributes) {
         for (CustomTagHandler handler:customTagHandlers) {
             if (handler.handleTag(true,tag) && handler.startTag(tag,attributes,mSpannableStringBuilder)) {
-                Log.wtf("customTagHandler handleStartTag","customTagHandlers="+tag);
                 return;
             }
         }
