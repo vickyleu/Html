@@ -54,7 +54,7 @@ import java.util.regex.Pattern;
  */
 
 @SuppressWarnings("unused")
-class HtmlToSpannedConverter implements ContentHandler {
+ class HtmlToSpannedConverter implements ContentHandler {
 
     private static final String TAG = "HtmlToSpannedConverter";
 
@@ -451,9 +451,9 @@ class HtmlToSpannedConverter implements ContentHandler {
     }
 
     private void handleStartTag(String tag, Attributes attributes) {
-        Log.wtf("handleStartTag","customTagHandlers="+customTagHandlers.size());
         for (CustomTagHandler handler:customTagHandlers) {
-            if (handler.handleTag(tag,attributes,mSpannableStringBuilder)) {
+            if (handler.handleTag(true,tag) && handler.startTag(tag,attributes,mSpannableStringBuilder)) {
+                Log.wtf("customTagHandler handleStartTag","customTagHandlers="+tag);
                 return;
             }
         }
@@ -536,7 +536,7 @@ class HtmlToSpannedConverter implements ContentHandler {
 
     private void handleEndTag(String tag) {
         for (CustomTagHandler handler:customTagHandlers) {
-            if (handler.handleTag(tag,null,mSpannableStringBuilder)) {
+            if (handler.handleTag(false,tag) && handler.endTag(tag,mSpannableStringBuilder)) {
                 return;
             }
         }
@@ -776,6 +776,7 @@ class HtmlToSpannedConverter implements ContentHandler {
     public void endPrefixMapping(String prefix) {
     }
 
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         handleStartTag(localName, attributes);
     }

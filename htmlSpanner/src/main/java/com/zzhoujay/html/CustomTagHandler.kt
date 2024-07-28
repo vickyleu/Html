@@ -5,8 +5,18 @@ import org.xml.sax.Attributes
 
 interface CustomTagHandler {
     fun handleTag(
+        opening: Boolean,
+        tag: String,
+    ): Boolean
+
+    fun startTag(
         tag: String,
         attributes: Attributes?,
-        mSpannableStringBuilder: SpannableStringBuilder
+        ssb: SpannableStringBuilder
+    ): Boolean
+
+    fun endTag(
+        tag: String,
+        ssb: SpannableStringBuilder
     ): Boolean
 }

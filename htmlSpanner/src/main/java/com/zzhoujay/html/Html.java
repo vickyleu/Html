@@ -101,7 +101,8 @@ public class Html {
      * @deprecated use {@link #fromHtml(String, int, android.text.Html.ImageGetter, android.text.Html.TagHandler,List)} instead.
      */
     @Deprecated
-    public static Spanned fromHtml(String source, android.text.Html.ImageGetter imageGetter, android.text.Html.TagHandler tagHandler, List< CustomTagHandler> customTagHandlers) {
+    public static Spanned fromHtml(String source, android.text.Html.ImageGetter imageGetter, android.text.Html.TagHandler tagHandler, 
+                                   List< CustomTagHandler> customTagHandlers) {
         return fromHtml(source, FROM_HTML_MODE_LEGACY, imageGetter, tagHandler,customTagHandlers);
     }
 
