@@ -54,7 +54,7 @@ import java.util.regex.Pattern;
  */
 
 @SuppressWarnings("unused")
- class HtmlToSpannedConverter implements ContentHandler {
+public class HtmlToSpannedConverter implements ContentHandler {
 
     private static final String TAG = "HtmlToSpannedConverter";
 
@@ -104,6 +104,11 @@ import java.util.regex.Pattern;
         mReader = parser;
         mFlags = flags;
         this.customTagHandlers = customTagHandlers;
+    }
+
+
+    public SpannableStringBuilder getSpannedBuiler() {
+        return mSpannableStringBuilder;
     }
 
     private static Pattern getArgbColorPattern() {
@@ -452,7 +457,7 @@ import java.util.regex.Pattern;
 
     private void handleStartTag(String tag, Attributes attributes) {
         for (CustomTagHandler handler:customTagHandlers) {
-            if (handler.handleTag(true,tag) && handler.startTag(tag,attributes,mSpannableStringBuilder)) {
+            if (handler.handleTag(true,tag,mSpannableStringBuilder) && handler.startTag(tag,attributes,mSpannableStringBuilder)) {
                 return;
             }
         }
@@ -535,7 +540,7 @@ import java.util.regex.Pattern;
 
     private void handleEndTag(String tag) {
         for (CustomTagHandler handler:customTagHandlers) {
-            if (handler.handleTag(false,tag) && handler.endTag(tag,mSpannableStringBuilder)) {
+            if (handler.handleTag(false,tag,mSpannableStringBuilder) && handler.endTag(tag,mSpannableStringBuilder)) {
                 return;
             }
         }

@@ -53,6 +53,9 @@ allprojects {
     val mGroup = mavenGroup
     val mVersion = "1.0.2"
     afterEvaluate {
+        if(rootDir.absolutePath != projectDir.parentFile.absolutePath){
+            return@afterEvaluate
+        }
         if (project == rootProject) {
             return@afterEvaluate
         }
