@@ -2,7 +2,9 @@ plugins{
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
 }
-
+kotlin{
+    jvmToolchain(libs.versions.jvmTarget.get().toInt())
+}
 android{
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     namespace = "com.zzhoujay.html"
