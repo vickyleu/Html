@@ -1,6 +1,6 @@
 [versions]
 agp = "8.7.3"
-kotlin = "2.1.0"
+kotlin = "2.1.10"
 tagsoup = "1.2.1"
 dokka = "1.9.20"
 android-compileSdk = "34"

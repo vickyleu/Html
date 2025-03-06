@@ -23,7 +23,6 @@ import android.text.style.SuperscriptSpan;
 import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 
 import com.zzhoujay.html.style.ZBulletSpan;
 import com.zzhoujay.html.style.ZCodeBlockSpan;
@@ -76,13 +75,175 @@ public class HtmlToSpannedConverter implements ContentHandler {
 
     static {
         sColorMap = new HashMap<>();
+// 红色系
+        sColorMap.put("indianred", 0xFFCD5C5C);
+        sColorMap.put("lightcoral", 0xFFF08080);
+        sColorMap.put("salmon", 0xFFFA8072);
+        sColorMap.put("darksalmon", 0xFFE9967A);
+        sColorMap.put("lightsalmon", 0xFFFFA07A);
+        sColorMap.put("crimson", 0xFFDC143C);
+        sColorMap.put("red", 0xFFFF0000);
+        sColorMap.put("firebrick", 0xFFB22222);
+        sColorMap.put("darkred", 0xFF8B0000);
+
+// 粉色系
+        sColorMap.put("pink", 0xFFFFC0CB);
+        sColorMap.put("lightpink", 0xFFFFB6C1);
+        sColorMap.put("hotpink", 0xFFFF69B4);
+        sColorMap.put("deeppink", 0xFFFF1493);
+        sColorMap.put("mediumvioletred", 0xFFC71585);
+        sColorMap.put("palevioletred", 0xFFDB7093);
+
+// 橙色系
+        sColorMap.put("coral", 0xFFFF7F50);
+        sColorMap.put("tomato", 0xFFFF6347);
+        sColorMap.put("orangered", 0xFFFF4500);
+        sColorMap.put("darkorange", 0xFFFF8C00);
+        sColorMap.put("orange", 0xFFFFA500);
+
+// 黄色系
+        sColorMap.put("gold", 0xFFFFD700);
+        sColorMap.put("yellow", 0xFFFFFF00);
+        sColorMap.put("lightyellow", 0xFFFFFFE0);
+        sColorMap.put("lemonchiffon", 0xFFFFFACD);
+        sColorMap.put("lightgoldenrodyellow", 0xFFFAFAD2);
+        sColorMap.put("papayawhip", 0xFFFFEFD5);
+        sColorMap.put("moccasin", 0xFFFFE4B5);
+        sColorMap.put("peachpuff", 0xFFFFDAB9);
+        sColorMap.put("palegoldenrod", 0xFFEEE8AA);
+        sColorMap.put("khaki", 0xFFF0E68C);
+        sColorMap.put("darkkhaki", 0xFFBDB76B);
+
+// 紫色系
+        sColorMap.put("lavender", 0xFFE6E6FA);
+        sColorMap.put("thistle", 0xFFD8BFD8);
+        sColorMap.put("plum", 0xFFDDA0DD);
+        sColorMap.put("violet", 0xFFEE82EE);
+        sColorMap.put("orchid", 0xFFDA70D6);
+        sColorMap.put("fuchsia", 0xFFFF00FF);
+        sColorMap.put("magenta", 0xFFFF00FF);
+        sColorMap.put("mediumorchid", 0xFFBA55D3);
+        sColorMap.put("mediumpurple", 0xFF9370DB);
+        sColorMap.put("rebeccapurple", 0xFF663399);
+        sColorMap.put("blueviolet", 0xFF8A2BE2);
+        sColorMap.put("darkviolet", 0xFF9400D3);
+        sColorMap.put("darkorchid", 0xFF9932CC);
+        sColorMap.put("darkmagenta", 0xFF8B008B);
+        sColorMap.put("purple", 0xFF800080);
+        sColorMap.put("indigo", 0xFF4B0082);
+        sColorMap.put("slateblue", 0xFF6A5ACD);
+        sColorMap.put("darkslateblue", 0xFF483D8B);
+        sColorMap.put("mediumslateblue", 0xFF7B68EE);
+
+// 绿色系
+        sColorMap.put("greenyellow", 0xFFADFF2F);
+        sColorMap.put("chartreuse", 0xFF7FFF00);
+        sColorMap.put("lawngreen", 0xFF7CFC00);
+        sColorMap.put("lime", 0xFF00FF00);
+        sColorMap.put("limegreen", 0xFF32CD32);
+        sColorMap.put("palegreen", 0xFF98FB98);
+        sColorMap.put("lightgreen", 0xFF90EE90);
+        sColorMap.put("mediumspringgreen", 0xFF00FA9A);
+        sColorMap.put("springgreen", 0xFF00FF7F);
+        sColorMap.put("mediumseagreen", 0xFF3CB371);
+        sColorMap.put("seagreen", 0xFF2E8B57);
+        sColorMap.put("forestgreen", 0xFF228B22);
+        sColorMap.put("green", 0xFF008000);
+        sColorMap.put("darkgreen", 0xFF006400);
+        sColorMap.put("yellowgreen", 0xFF9ACD32);
+        sColorMap.put("olivedrab", 0xFF6B8E23);
+        sColorMap.put("olive", 0xFF808000);
+        sColorMap.put("darkolivegreen", 0xFF556B2F);
+        sColorMap.put("mediumaquamarine", 0xFF66CDAA);
+        sColorMap.put("darkseagreen", 0xFF8FBC8F);
+        sColorMap.put("lightseagreen", 0xFF20B2AA);
+        sColorMap.put("darkcyan", 0xFF008B8B);
+        sColorMap.put("teal", 0xFF008080);
+
+// 蓝色系
+        sColorMap.put("aqua", 0xFF00FFFF);
+        sColorMap.put("cyan", 0xFF00FFFF);
+        sColorMap.put("lightcyan", 0xFFE0FFFF);
+        sColorMap.put("paleturquoise", 0xFFAFEEEE);
+        sColorMap.put("aquamarine", 0xFF7FFFD4);
+        sColorMap.put("turquoise", 0xFF40E0D0);
+        sColorMap.put("mediumturquoise", 0xFF48D1CC);
+        sColorMap.put("darkturquoise", 0xFF00CED1);
+        sColorMap.put("cadetblue", 0xFF5F9EA0);
+        sColorMap.put("steelblue", 0xFF4682B4);
+        sColorMap.put("lightsteelblue", 0xFFB0C4DE);
+        sColorMap.put("powderblue", 0xFFB0E0E6);
+        sColorMap.put("lightblue", 0xFFADD8E6);
+        sColorMap.put("skyblue", 0xFF87CEEB);
+        sColorMap.put("lightskyblue", 0xFF87CEFA);
+        sColorMap.put("deepskyblue", 0xFF00BFFF);
+        sColorMap.put("dodgerblue", 0xFF1E90FF);
+        sColorMap.put("cornflowerblue", 0xFF6495ED);
+        sColorMap.put("royalblue", 0xFF4169E1);
+        sColorMap.put("blue", 0xFF0000FF);
+        sColorMap.put("mediumblue", 0xFF0000CD);
+        sColorMap.put("darkblue", 0xFF00008B);
+        sColorMap.put("navy", 0xFF000080);
+        sColorMap.put("midnightblue", 0xFF191970);
+
+// 棕色系
+        sColorMap.put("cornsilk", 0xFFFFF8DC);
+        sColorMap.put("blanchedalmond", 0xFFFFEBCD);
+        sColorMap.put("bisque", 0xFFFFE4C4);
+        sColorMap.put("navajowhite", 0xFFFFDEAD);
+        sColorMap.put("wheat", 0xFFF5DEB3);
+        sColorMap.put("burlywood", 0xFFDEB887);
+        sColorMap.put("tan", 0xFFD2B48C);
+        sColorMap.put("rosybrown", 0xFFBC8F8F);
+        sColorMap.put("sandybrown", 0xFFF4A460);
+        sColorMap.put("goldenrod", 0xFFDAA520);
+        sColorMap.put("darkgoldenrod", 0xFFB8860B);
+        sColorMap.put("peru", 0xFFCD853F);
+        sColorMap.put("chocolate", 0xFFD2691E);
+        sColorMap.put("saddlebrown", 0xFF8B4513);
+        sColorMap.put("sienna", 0xFFA0522D);
+        sColorMap.put("brown", 0xFFA52A2A);
+        sColorMap.put("maroon", 0xFF800000);
+
+// 白色系
+        sColorMap.put("white", 0xFFFFFFFF);
+        sColorMap.put("snow", 0xFFFFFAFA);
+        sColorMap.put("honeydew", 0xFFF0FFF0);
+        sColorMap.put("mintcream", 0xFFF5FFFA);
+        sColorMap.put("azure", 0xFFF0FFFF);
+        sColorMap.put("aliceblue", 0xFFF0F8FF);
+        sColorMap.put("ghostwhite", 0xFFF8F8FF);
+        sColorMap.put("whitesmoke", 0xFFF5F5F5);
+        sColorMap.put("seashell", 0xFFFFF5EE);
+        sColorMap.put("beige", 0xFFF5F5DC);
+        sColorMap.put("oldlace", 0xFFFDF5E6);
+        sColorMap.put("floralwhite", 0xFFFFFAF0);
+        sColorMap.put("ivory", 0xFFFFFFF0);
+        sColorMap.put("antiquewhite", 0xFFFAEBD7);
+        sColorMap.put("linen", 0xFFFAF0E6);
+        sColorMap.put("lavenderblush", 0xFFFFF0F5);
+        sColorMap.put("mistyrose", 0xFFFFE4E1);
+
+// 灰色系
+        sColorMap.put("gainsboro", 0xFFDCDCDC);
+        sColorMap.put("lightgray", 0xFFD3D3D3);
+        sColorMap.put("silver", 0xFFC0C0C0);
         sColorMap.put("darkgray", 0xFFA9A9A9);
         sColorMap.put("gray", 0xFF808080);
-        sColorMap.put("lightgray", 0xFFD3D3D3);
+        sColorMap.put("dimgray", 0xFF696969);
+        sColorMap.put("lightslategray", 0xFF778899);
+        sColorMap.put("slategray", 0xFF708090);
+        sColorMap.put("darkslategray", 0xFF2F4F4F);
+        sColorMap.put("black", 0xFF000000);
+
+// 灰色系的英式拼写
+        sColorMap.put("lightgrey", 0xFFD3D3D3);
         sColorMap.put("darkgrey", 0xFFA9A9A9);
         sColorMap.put("grey", 0xFF808080);
-        sColorMap.put("lightgrey", 0xFFD3D3D3);
-        sColorMap.put("green", 0xFF008000);
+        sColorMap.put("dimgrey", 0xFF696969);
+        sColorMap.put("lightslategrey", 0xFF778899);
+        sColorMap.put("slategrey", 0xFF708090);
+        sColorMap.put("darkslategrey", 0xFF2F4F4F);
     }
 
     private String mSource;
