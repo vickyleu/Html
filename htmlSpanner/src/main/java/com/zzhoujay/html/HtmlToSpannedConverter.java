@@ -921,7 +921,7 @@ public class HtmlToSpannedConverter implements ContentHandler {
             }
         }
         int htmlColor = Kit.getHtmlColor(color);
-        if (htmlColor != -1) {
+        if (htmlColor != 0) {
             return htmlColor;
         }
         return Color.TRANSPARENT;

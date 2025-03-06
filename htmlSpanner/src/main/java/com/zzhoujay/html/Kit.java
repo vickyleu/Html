@@ -203,7 +203,7 @@ public class Kit {
         }
         Integer integer = sColorNameMap.get(color);
         if (integer == null) {
-            return -1;
+            return 0;
         }
         return integer;
     }
