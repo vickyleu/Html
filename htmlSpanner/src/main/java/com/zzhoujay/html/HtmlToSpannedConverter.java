@@ -75,6 +75,7 @@ public class HtmlToSpannedConverter implements ContentHandler {
 
     static {
         sColorMap = new HashMap<>();
+        sColorMap.put("transparent", 0);
 // 红色系
         sColorMap.put("indianred", 0xFFCD5C5C);
         sColorMap.put("lightcoral", 0xFFF08080);
@@ -923,7 +924,7 @@ public class HtmlToSpannedConverter implements ContentHandler {
         if (htmlColor != -1) {
             return htmlColor;
         }
-        return Color.BLACK;
+        return Color.TRANSPARENT;
     }
 
     public void setDocumentLocator(Locator locator) {

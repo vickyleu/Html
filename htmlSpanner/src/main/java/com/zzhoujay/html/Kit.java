@@ -18,6 +18,7 @@ public class Kit {
 
     static {
         sColorNameMap = new HashMap<>();
+        sColorNameMap.put("transparent", 0);
         // 红色系
         sColorNameMap.put("indianred", -3318692);
         sColorNameMap.put("lightcoral", -1015680);
