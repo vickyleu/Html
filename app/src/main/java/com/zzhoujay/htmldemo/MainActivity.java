@@ -132,13 +132,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        Spanned spanned = Html.fromHtml(color_test);
-        Spanned spanned = Html.fromHtml("<html><body><p style=\"background-color:rgba(255,0,0,1);\">你们好</p><p style=\"background-color:rgba(255,0,0,1);\">123312n</><p style=\"background-color:rgba(255,0,0,1);\">5678</></body></>");
+        Spanned spanned = Html.fromHtml("""
+                <html>
+                   <head></head>
+                                                               <body>
+                                                                <p><span style="font-family: 微软雅黑, &quot;sans-serif&quot;; font-size: 14px;">真理是无条件的、无限的</span></p>
+                                                               </body>
+                                                              </html>
+                """);
 
         SpannableString hello = new SpannableString("hello");
         hello.setSpan(new ForegroundColorSpan(Color.BLUE), 0, hello.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         hello.setSpan(new BackgroundColorSpan(Color.GRAY), 0, hello.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        ((TextView) findViewById(R.id.text)).setBackgroundColor(Color.BLUE);
+        ((TextView) findViewById(R.id.text)).setBackgroundColor(Color.TRANSPARENT);
         ((TextView) findViewById(R.id.text)).setText(spanned);
 
 

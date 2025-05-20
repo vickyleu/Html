@@ -618,11 +618,14 @@ public class HtmlToSpannedConverter implements ContentHandler {
     }
 
     private void handleStartTag(String tag, Attributes attributes) {
-        for (CustomTagHandler handler:customTagHandlers) {
-            if (handler.handleTag(true,tag,mSpannableStringBuilder) && handler.startTag(tag,attributes,mSpannableStringBuilder)) {
-                return;
+        if(customTagHandlers!=null){
+            for (CustomTagHandler handler:customTagHandlers) {
+                if (handler.handleTag(true,tag,mSpannableStringBuilder) && handler.startTag(tag,attributes,mSpannableStringBuilder)) {
+                    return;
+                }
             }
         }
+
         //noinspection StatementWithEmptyBody
         if (tag.equalsIgnoreCase("br")) {
             // We don't need to handle this. TagSoup will ensure that there's a </br> for each <br>
@@ -701,11 +704,14 @@ public class HtmlToSpannedConverter implements ContentHandler {
     }
 
     private void handleEndTag(String tag) {
-        for (CustomTagHandler handler:customTagHandlers) {
-            if (handler.handleTag(false,tag,mSpannableStringBuilder) && handler.endTag(tag,mSpannableStringBuilder)) {
-                return;
+        if(customTagHandlers!=null){
+            for (CustomTagHandler handler:customTagHandlers) {
+                if (handler.handleTag(false,tag,mSpannableStringBuilder) && handler.endTag(tag,mSpannableStringBuilder)) {
+                    return;
+                }
             }
         }
+
         if (tag.equalsIgnoreCase("br")) {
             handleBr(mSpannableStringBuilder);
         } else if (tag.equalsIgnoreCase("p")) {
@@ -924,7 +930,7 @@ public class HtmlToSpannedConverter implements ContentHandler {
         if (htmlColor != 0) {
             return htmlColor;
         }
-        return Color.TRANSPARENT;
+        return Color.BLACK;
     }
 
     public void setDocumentLocator(Locator locator) {
