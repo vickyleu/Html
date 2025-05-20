@@ -892,6 +892,9 @@ public class HtmlToSpannedConverter implements ContentHandler {
     }
 
     private int getHtmlColor(String color, int defaultColor) {
+        if(TextUtils.isEmpty(color)){
+            return defaultColor;
+        }
         // 16进制颜色值
         try {
             Matcher hexMatcher = getHexColorPattern().matcher(color);
