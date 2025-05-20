@@ -141,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
                                                               </html>
                 """);
 
-        SpannableString hello = new SpannableString("hello");
-        hello.setSpan(new ForegroundColorSpan(Color.BLUE), 0, hello.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        hello.setSpan(new BackgroundColorSpan(Color.GRAY), 0, hello.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        SpannableString hello = new SpannableString("hello");
+//        hello.setSpan(new ForegroundColorSpan(Color.BLUE), 0, hello.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        hello.setSpan(new BackgroundColorSpan(Color.GRAY), 0, hello.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         ((TextView) findViewById(R.id.text)).setBackgroundColor(Color.TRANSPARENT);
         ((TextView) findViewById(R.id.text)).setText(spanned);

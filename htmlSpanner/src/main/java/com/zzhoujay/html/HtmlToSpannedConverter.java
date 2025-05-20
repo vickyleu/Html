@@ -23,6 +23,7 @@ import android.text.style.SuperscriptSpan;
 import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 
 import com.zzhoujay.html.style.ZBulletSpan;
 import com.zzhoujay.html.style.ZCodeBlockSpan;
@@ -839,7 +840,8 @@ public class HtmlToSpannedConverter implements ContentHandler {
         if (style != null) {
             Matcher m = getForegroundColorPattern().matcher(style);
             if (m.find()) {
-                int c = getHtmlColor(m.group(1));
+                int c = getHtmlColor(m.group(1),Color.TRANSPARENT);
+                Log.w("startCssStyle","c1="+c);
                 if (c != -1) {
                     start(text, new Foreground(c));
                 }
@@ -847,7 +849,8 @@ public class HtmlToSpannedConverter implements ContentHandler {
 
             m = getBackgroundColorPattern().matcher(style);
             if (m.find()) {
-                int c = getHtmlColor(m.group(1));
+                int c = getHtmlColor(m.group(1),Color.TRANSPARENT);
+                Log.w("startCssStyle","c2="+c);
                 if (c != -1) {
                     start(text, new Background(c));
                 }
@@ -856,6 +859,7 @@ public class HtmlToSpannedConverter implements ContentHandler {
             m = getTextDecorationPattern().matcher(style);
             if (m.find()) {
                 String textDecoration = m.group(1);
+                Log.w("startCssStyle","textDecoration="+textDecoration);
                 int i = textDecoration.indexOf(';');
                 if (i > 0) {
                     textDecoration = textDecoration.substring(0, i).trim();
@@ -874,7 +878,8 @@ public class HtmlToSpannedConverter implements ContentHandler {
         String face = attributes.getValue("", "face");
 
         if (!TextUtils.isEmpty(color)) {
-            int c = getHtmlColor(color);
+            int c = getHtmlColor(color,Color.BLACK);
+            Log.w("startFont","c3="+c);
             if (c != -1) {
                 start(text, new Foreground(c | 0xFF000000));
             }
@@ -885,7 +890,7 @@ public class HtmlToSpannedConverter implements ContentHandler {
         }
     }
 
-    private int getHtmlColor(String color) {
+    private int getHtmlColor(String color, int defaultColor) {
         // 16进制颜色值
         try {
             Matcher hexMatcher = getHexColorPattern().matcher(color);
@@ -927,10 +932,11 @@ public class HtmlToSpannedConverter implements ContentHandler {
             }
         }
         int htmlColor = Kit.getHtmlColor(color);
+        Log.wtf("Kit.getHtmlColor(color);","htmlColor="+htmlColor);
         if (htmlColor != 0) {
             return htmlColor;
         }
-        return Color.BLACK;
+        return defaultColor;
     }
 
     public void setDocumentLocator(Locator locator) {
