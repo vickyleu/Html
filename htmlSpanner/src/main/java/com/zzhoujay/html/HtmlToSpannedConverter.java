@@ -879,10 +879,11 @@ public class HtmlToSpannedConverter implements ContentHandler {
 
         if (!TextUtils.isEmpty(color)) {
             int c = getHtmlColor(color,Color.BLACK);
-            Log.w("startFont","c3="+c);
             if (c != -1) {
                 start(text, new Foreground(c | 0xFF000000));
             }
+        }else{
+            start(text, new Foreground(Color.BLACK));
         }
 
         if (!TextUtils.isEmpty(face)) {

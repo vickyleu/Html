@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        Spanned spanned = Html.fromHtml(color_test);
-        Spanned spanned = Html.fromHtml("""
+        Spanned spanned = com.zzhoujay.html.Html.fromHtml("""
                 <html>
                    <head></head>
                                                                <body>
