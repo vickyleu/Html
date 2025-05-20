@@ -195,7 +195,7 @@ public class Kit {
             Method getHtmlColor = Color.class.getMethod("getHtmlColor", String.class);
             return (int) getHtmlColor.invoke(null, color);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

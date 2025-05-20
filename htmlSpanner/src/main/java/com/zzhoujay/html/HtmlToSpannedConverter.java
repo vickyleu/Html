@@ -840,7 +840,7 @@ public class HtmlToSpannedConverter implements ContentHandler {
         if (style != null) {
             Matcher m = getForegroundColorPattern().matcher(style);
             if (m.find()) {
-                int c = getHtmlColor(m.group(1),Color.TRANSPARENT);
+                int c = getHtmlColor(m.group(1),Color.BLACK);
                 Log.w("startCssStyle","c1="+c);
                 if (c != -1) {
                     start(text, new Foreground(c));
